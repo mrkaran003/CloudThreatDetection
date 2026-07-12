@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 class="mb-4">Dashboard</h2>
+
+<div class="row">
+
+    <div class="col-md-4">
+
+        <div class="card text-bg-primary mb-3">
+
+            <div class="card-body">
+
+                <h5>Total Uploaded Files</h5>
+
+                <h2>{{ total_files }}</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="card text-bg-danger mb-3">
+
+            <div class="card-body">
+
+                <h5>Total Threats</h5>
+
+                <h2>{{ total_threats }}</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="card text-bg-warning mb-3">
+
+            <div class="card-body">
+
+                <h5>High Risk</h5>
+
+                <h2>{{ high_risk }}</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="card mt-4">
+
+    <div class="card-header">
+        Welcome
+    </div>
+
+    <div class="card-body">
+
+        <h4>Cloud-Based Cyber Threat Detection System</h4>
+
+        <p>
+            Welcome to your Final Year Project Dashboard.
+            Here you can upload log files, detect cyber threats using AI,
+            view history, generate reports, and monitor security analytics.
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock %}

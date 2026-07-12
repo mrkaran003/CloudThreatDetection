@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">
+        Security Report
+    </h2>
+
+    <div class="row">
+
+        <div class="col-md-3">
+
+            <div class="card text-bg-primary mb-3">
+
+                <div class="card-body">
+
+                    <h5>Total Files</h5>
+
+                    <h2>{{ total_files }}</h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card text-bg-danger mb-3">
+
+                <div class="card-body">
+
+                    <h5>Total Threats</h5>
+
+                    <h2>{{ total_threats }}</h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card text-bg-warning mb-3">
+
+                <div class="card-body">
+
+                    <h5>High Risk</h5>
+
+                    <h2>{{ high_risk }}</h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card text-bg-success mb-3">
+
+                <div class="card-body">
+
+                    <h5>Low Risk</h5>
+
+                    <h2>{{ low_risk }}</h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+
+{% endblock %}

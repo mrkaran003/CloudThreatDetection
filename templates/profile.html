@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-primary text-white">
+
+            <h3>User Profile</h3>
+
+        </div>
+
+        <div class="card-body">
+            <div class="text-center mb-4">
+
+    <img
+        src="{{ url_for('static', filename='images/profiles/myphoto.jpg') }}"
+        alt="Profile Picture"
+        width="150"
+        height="150"
+        class="rounded-circle border">
+
+</div>
+
+            <p>
+                <strong>Full Name:</strong>
+                {{ user.fullname }}
+            </p>
+
+            <p>
+                <strong>Username:</strong>
+                {{ user.username }}
+            </p>
+
+            <p>
+                <strong>Email:</strong>
+                {{ user.email }}
+            </p>
+
+            <p>
+                <strong>Role:</strong>
+                {{ user.role }}
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

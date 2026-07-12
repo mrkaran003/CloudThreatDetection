@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+<h2 class="mb-4">
+Threat Detection History
+</h2>
+
+<div class="card shadow">
+
+<div class="card-body">
+
+<table class="table table-bordered table-striped">
+
+<thead class="table-dark">
+
+<tr>
+
+<th>ID</th>
+<th>Filename</th>
+<th>Prediction</th>
+<th>Severity</th>
+<th>Confidence</th>
+<th>Date</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for threat in threats %}
+
+<tr>
+
+<td>{{ threat.id }}</td>
+
+<td>{{ threat.filename }}</td>
+
+<td>{{ threat.prediction }}</td>
+
+<td>
+
+{% if threat.severity=="High" %}
+
+<span class="badge bg-danger">
+High
+</span>
+
+{% else %}
+
+<span class="badge bg-success">
+Low
+</span>
+
+{% endif %}
+
+</td>
+
+<td>
+
+{{ threat.confidence }}%
+
+</td>
+
+<td>
+
+{{ threat.detected_at }}
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}
