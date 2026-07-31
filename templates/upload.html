@@ -4,10 +4,56 @@
 
 <div class="container mt-4">
 
-    <div class="card shadow">
+    <div class="text-center mb-4">
+
+        <h2 class="fw-bold text-info">
+            🛡️ CloudShield AI Upload Center
+        </h2>
+
+        <p class="text-secondary">
+            Upload a security log or suspicious file for AI-powered cloud threat detection.
+        </p>
+
+    </div>
+
+    <!-- Loading Overlay -->
+
+    <div id="loadingOverlay"
+         style="
+            display:none;
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background:rgba(0,0,0,.85);
+            z-index:9999;
+            justify-content:center;
+            align-items:center;
+            flex-direction:column;">
+
+        <div class="spinner-border text-info"
+             style="width:5rem;height:5rem;">
+        </div>
+
+        <h3 class="text-white mt-4">
+            🤖 AI is analyzing your file...
+        </h3>
+
+        <p class="text-light">
+            Please wait...
+        </p>
+
+    </div>
+
+    <div class="card shadow-lg border-0">
 
         <div class="card-header bg-primary text-white">
-            <h3>Upload Security Log File</h3>
+
+            <h4 class="mb-0">
+                📁 Upload Security Log File
+            </h4>
+
         </div>
 
         <div class="card-body">
@@ -15,19 +61,29 @@
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">
+
+                        <div class="alert alert-{{ category }} alert-dismissible fade show">
+
                             {{ message }}
+
+                            <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="alert">
+                            </button>
+
                         </div>
+
                     {% endfor %}
                 {% endif %}
             {% endwith %}
 
             <form method="POST" enctype="multipart/form-data">
 
-                <div class="mb-3">
+                <div class="mb-4">
 
-                    <label class="form-label">
-                        Select File
+                    <label class="form-label fw-bold">
+                        Select Security File
                     </label>
 
                     <input
@@ -36,22 +92,51 @@
                         class="form-control"
                         required>
 
+                    <small class="text-muted">
+                        Supported formats:
+                        .log .txt .csv .json .pcap
+                    </small>
+
                 </div>
 
-                <button
-                    type="submit"
-                    class="btn btn-success">
+                <div class="d-grid">
 
-                    Upload File
+                    <button
+                        type="submit"
+                        class="btn btn-success btn-lg">
 
-                </button>
+                        🚀 Upload & Analyze
+
+                    </button>
+
+                </div>
 
             </form>
+
+        </div>
+
+        <div class="card-footer text-center">
+
+            <small class="text-muted">
+
+                AI Threat Detection • Machine Learning • Real-Time Cloud Security
+
+            </small>
 
         </div>
 
     </div>
 
 </div>
+
+<script>
+
+document.querySelector("form").addEventListener("submit", function () {
+
+    document.getElementById("loadingOverlay").style.display = "flex";
+
+});
+
+</script>
 
 {% endblock %}

@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <h2 class="mb-4">
+
+        📁 File Management
+
+    </h2>
+
+    <div class="mb-4">
+
+        <input
+            type="text"
+            id="fileSearch"
+            class="form-control"
+            placeholder="🔍 Search filename..."
+        >
+
+    </div>
+
+    <div class="table-responsive">
+
+        <table
+            class="table table-dark table-hover align-middle"
+            id="filesTable"
+        >
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Filename</th>
+
+                    <th>Type</th>
+
+                    <th>Size</th>
+
+                    <th>Uploaded By</th>
+
+                    <th>Status</th>
+
+                    <th>Uploaded At</th>
+
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for file in uploaded_files %}
+
+                <tr>
+
+                    <td>{{ file.id }}</td>
+
+                    <td>{{ file.filename }}</td>
+
+                    <td>
+
+                        <span class="badge bg-info">
+
+                            {{ file.file_type }}
+
+                        </span>
+
+                    </td>
+
+                    <td>{{ file.file_size }} Bytes</td>
+
+                    <td>{{ file.uploaded_by }}</td>
+
+                    <td>
+
+                        {% if file.status == "Completed" %}
+
+                            <span class="badge bg-success">
+
+                                {{ file.status }}
+
+                            </span>
+
+                        {% elif file.status == "Analyzing" %}
+
+                            <span class="badge bg-warning text-dark">
+
+                                {{ file.status }}
+
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-danger">
+
+                                {{ file.status }}
+
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>{{ file.upload_time }}</td>
+
+                    <td>
+
+                        <a
+                            href="{{ url_for('files.delete_file', file_id=file.id) }}"
+                            class="btn btn-danger btn-sm"
+                            onclick="return confirm('Delete this file?');">
+
+                            🗑 Delete
+
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const search = document.getElementById("fileSearch");
+
+    const rows = document.querySelectorAll("#filesTable tbody tr");
+
+    search.addEventListener("keyup", function () {
+
+        const value = this.value.toLowerCase();
+
+        rows.forEach(function (row) {
+
+            row.style.display = row.innerText
+                .toLowerCase()
+                .includes(value)
+
+                ? ""
+
+                : "none";
+
+        });
+
+    });
+
+});
+
+</script>
+
+{% endblock %}

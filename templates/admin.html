@@ -1,0 +1,453 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <h2 class="mb-4">
+        🛡️ Admin Dashboard
+    </h2>
+
+    <div class="row">
+
+        <div class="col-md-3">
+            <div class="cyber-card text-center mb-4">
+                <h5>👥 Users</h5>
+                <h2>{{ total_users }}</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="cyber-card text-center mb-4">
+                <h5>📁 Files</h5>
+                <h2>{{ total_files }}</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="cyber-card text-center mb-4">
+                <h5>🚨 Threats</h5>
+                <h2>{{ total_threats }}</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="cyber-card text-center mb-4">
+                <h5>🔴 Critical</h5>
+                <h2 class="text-danger">
+                    {{ critical_risk }}
+                </h2>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+
+    <div class="col-md-4">
+
+        <div class="cyber-card text-center mb-4">
+
+            <h5>🟠 High Risk</h5>
+
+            <h2 class="text-warning">
+
+                {{ high_risk }}
+
+            </h2>
+
+        </div>
+
+    </div>
+    <!-- Threat Analytics -->
+     <!-- Latest Users & Latest Uploads -->
+
+<div class="row">
+
+    <div class="col-lg-6">
+
+        <div class="cyber-card mb-4">
+
+            <h4 class="mb-3">
+
+                👥 Latest Users
+
+            </h4>
+
+            <div class="table-responsive">
+
+                <table class="table table-dark table-hover align-middle">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Full Name</th>
+
+                            <th>Username</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for user in recent_users %}
+
+                        <tr>
+
+                            <td>{{ user.fullname }}</td>
+
+                            <td>{{ user.username }}</td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-6">
+
+        <div class="cyber-card mb-4">
+
+            <hr class="my-5">
+
+<h3 class="mb-4">
+
+    👥 User Management
+
+</h3>
+
+<div class="mb-3">
+
+    <input
+        type="text"
+        id="userSearch"
+        class="form-control"
+        placeholder="🔍 Search users..."
+    >
+
+</div>
+
+<div class="table-responsive">
+
+    <table
+        class="table table-dark table-hover align-middle"
+        id="usersTable"
+    >
+
+        <thead>
+
+            <tr>
+
+                <th>ID</th>
+                <th>Full Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Created</th>
+                <th>Actions</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            {% for user in users %}
+
+            <tr>
+
+                <td>{{ user.id }}</td>
+
+                <td>{{ user.fullname }}</td>
+
+                <td>{{ user.username }}</td>
+
+                <td>{{ user.email }}</td>
+
+                <td>
+
+                    <span class="badge bg-primary">
+
+                        {{ user.role }}
+
+                    </span>
+
+                </td>
+
+                <td>{{ user.created_at }}</td>
+
+                <td>
+
+                    <a
+                        href="{{ url_for('admin.change_role', user_id=user.id) }}"
+                        class="btn btn-warning btn-sm">
+
+                        Role
+
+                    </a>
+
+                    <a
+                        href="{{ url_for('admin.delete_user', user_id=user.id) }}"
+                        class="btn btn-danger btn-sm"
+                        onclick="return confirm('Delete this user?');">
+
+                        Delete
+
+                    </a>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div><script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    // ==========================
+    // User Search
+    // ==========================
+
+    const search = document.getElementById("userSearch");
+
+    if (search) {
+
+        const rows = document.querySelectorAll("#usersTable tbody tr");
+
+        search.addEventListener("keyup", function () {
+
+            const value = this.value.toLowerCase();
+
+            rows.forEach(function (row) {
+
+                row.style.display = row.innerText
+                    .toLowerCase()
+                    .includes(value)
+
+                    ? ""
+
+                    : "none";
+
+            });
+
+        });
+
+    }
+
+    // ==========================
+    // Admin Chart
+    // ==========================
+
+    const adminCanvas = document.getElementById("adminChart");
+
+    if (adminCanvas) {
+
+        new Chart(adminCanvas, {
+
+            type: "doughnut",
+
+            data: {
+
+                labels: [
+
+                    "Critical",
+
+                    "High",
+
+                    "Medium",
+
+                    "Low"
+
+                ],
+
+                datasets: [{
+
+                    data: [
+
+                        window.adminCritical,
+
+                        window.adminHigh,
+
+                        window.adminMedium,
+
+                        window.adminLow
+
+                    ],
+
+                    backgroundColor: [
+
+                        "#dc2626",
+
+                        "#f97316",
+
+                        "#eab308",
+
+                        "#22c55e"
+
+                    ],
+
+                    borderWidth: 2
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                plugins: {
+
+                    legend: {
+
+                        position: "bottom",
+
+                        labels: {
+
+                            color: "white",
+
+                            font: {
+
+                                size: 13
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        });
+
+    }
+
+});
+
+</script>
+
+</div>
+
+{% endblock %}
+
+            <div class="table-responsive">
+
+                <table class="table table-dark table-hover align-middle">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Filename</th>
+
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for file in recent_files %}
+
+                        <tr>
+
+                            <td>{{ file.filename }}</td>
+
+                            <td>{{ file.status }}</td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="cyber-card mb-4">
+
+    <h4 class="mb-3">
+
+        📊 Threat Analytics
+
+    </h4>
+
+    <div style="height:350px;">
+
+        <canvas id="adminChart"></canvas>
+
+    </div>
+
+</div>
+
+<script>
+
+window.adminCritical = {{ critical_risk|tojson }};
+
+window.adminHigh = {{ high_risk|tojson }};
+
+window.adminMedium = {{ medium_risk|tojson }};
+
+window.adminLow = {{ low_risk|tojson }};
+
+</script>
+
+    <div class="col-md-4">
+
+        <div class="cyber-card text-center mb-4">
+
+            <h5>🟡 Medium Risk</h5>
+
+            <h2 class="text-info">
+
+                {{ medium_risk }}
+
+            </h2>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="cyber-card text-center mb-4">
+
+            <h5>🟢 Low Risk</h5>
+
+            <h2 class="text-success">
+
+                {{ low_risk }}
+
+            </h2>
+
+        </div>
+
+    </div>
+
+</div>

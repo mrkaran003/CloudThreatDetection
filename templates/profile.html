@@ -4,45 +4,149 @@
 
 <div class="container mt-4">
 
-    <div class="card shadow">
+    <h2 class="mb-4">
 
-        <div class="card-header bg-primary text-white">
+        👤 User Profile
 
-            <h3>User Profile</h3>
+    </h2>
+
+    <div class="cyber-card">
+
+        <div class="row align-items-center">
+
+            <div class="col-md-4 text-center">
+
+                <img
+
+                    src="{{ url_for('static', filename='images/profiles/myphoto.jpg') }}"
+
+                    alt="Profile Picture"
+
+                    width="180"
+
+                    height="180"
+
+                    class="rounded-circle border border-info shadow"
+
+                >
+
+            </div>
+
+            <div class="col-md-8">
+
+                <h3 class="mb-3">
+
+                    {{ user.fullname }}
+
+                </h3>
+
+                <hr>
+
+                <p>
+
+                    <strong>👤 Full Name:</strong>
+
+                    {{ user.fullname }}
+
+                </p>
+
+                <p>
+
+                    <strong>🆔 Username:</strong>
+
+                    {{ user.username }}
+
+                </p>
+
+                <p>
+
+                    <strong>📧 Email:</strong>
+
+                    {{ user.email }}
+
+                </p>
+
+                <p>
+
+                    <strong>🛡️ Role:</strong>
+
+                    {{ user.role }}
+
+                </p>
+
+                <p>
+
+                    <strong>📅 Account Created:</strong>
+
+                    {{ user.created_at }}
+
+                </p>
+
+            </div>
 
         </div>
 
-        <div class="card-body">
-            <div class="text-center mb-4">
+    </div>
 
-    <img
-        src="{{ url_for('static', filename='images/profiles/myphoto.jpg') }}"
-        alt="Profile Picture"
-        width="150"
-        height="150"
-        class="rounded-circle border">
+    <div class="row mt-4">
 
-</div>
+        <div class="col-md-4">
 
-            <p>
-                <strong>Full Name:</strong>
-                {{ user.fullname }}
-            </p>
+            <div class="cyber-card text-center">
 
-            <p>
-                <strong>Username:</strong>
-                {{ user.username }}
-            </p>
+                <h5>
 
-            <p>
-                <strong>Email:</strong>
-                {{ user.email }}
-            </p>
+                    📁 Uploaded Files
 
-            <p>
-                <strong>Role:</strong>
-                {{ user.role }}
-            </p>
+                </h5>
+
+                <h2>
+
+                    {{ total_uploads }}
+
+                </h2>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="cyber-card text-center">
+
+                <h5>
+
+                    🚨 Threats Detected
+
+                </h5>
+
+                <h2>
+
+                    {{ total_threats }}
+
+                </h2>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="cyber-card text-center">
+
+                <h5>
+
+                    ⚠️ High Risk
+
+                </h5>
+
+                <h2>
+
+                    {{ high_risk }}
+
+                </h2>
+
+            </div>
 
         </div>
 

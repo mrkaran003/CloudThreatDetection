@@ -1,0 +1,192 @@
+.cyber-card {
+
+    background: #161b22;
+
+    border: 1px solid #30363d;
+
+    border-radius: 15px;
+
+    padding: 25px;
+
+    min-height: 180px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    color: white;
+
+    box-shadow: 0 0 20px rgba(
+        0,
+        255,
+        255,
+        0.1
+    );
+
+    transition: 0.3s;
+
+}
+
+.cyber-card:hover {
+
+    transform: translateY(-5px);
+
+    box-shadow: 0 0 25px rgba(
+        0,
+        255,
+        255,
+        0.3
+    );
+
+}
+/* ===========================
+   NAVBAR
+=========================== */
+
+.navbar{
+    background:#0d1117 !important;
+    border-bottom:1px solid #30363d;
+}
+
+.navbar-brand{
+    color:#38bdf8 !important;
+    font-size:30px;
+    font-weight:bold;
+}
+
+.navbar-nav{
+    align-items:center;
+}
+
+.navbar-nav .nav-item{
+    margin-left:15px;
+}
+
+.navbar-nav .nav-link{
+    color:#ffffff !important;
+    font-size:16px !important;
+    font-weight:500;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.navbar-nav .nav-link:hover{
+    color:#38bdf8 !important;
+}
+
+.navbar-nav .nav-link.active{
+    color:#38bdf8 !important;
+}
+/* ========================= */
+/* Dashboard Title */
+/* ========================= */
+
+.dashboard-title{
+    font-size:38px;
+    font-weight:bold;
+    color:#00ffff;
+}
+
+.dashboard-subtitle{
+    color:#8b949e;
+    margin-bottom:30px;
+}
+
+/* ========================= */
+/* Cyber Cards */
+/* ========================= */
+
+.cyber-card{
+    background:#161b22;
+    border:1px solid #30363d;
+    border-radius:15px;
+    padding:25px;
+    color:white;
+    box-shadow:0 0 15px rgba(0,255,255,.08);
+    transition:.3s;
+}
+
+.cyber-card:hover{
+
+    transform:translateY(-6px);
+
+    box-shadow:0 0 30px rgba(0,255,255,.35);
+
+}
+
+/* ========================= */
+
+.card-title{
+
+    color:#8b949e;
+
+    font-size:16px;
+
+    margin-bottom:12px;
+
+}
+
+/* ========================= */
+
+.card-number{
+
+    font-size:34px;
+
+    font-weight:bold;
+
+}
+
+/* ========================= */
+
+.table{
+
+    margin-bottom:0;
+
+}
+
+/* ========================= */
+
+.table td{
+
+    vertical-align:middle;
+
+}
+
+/* ========================= */
+
+.badge{
+
+    font-size:13px;
+
+    padding:8px 12px;
+
+}
+
+/* ========================= */
+
+.btn{
+
+    border-radius:10px;
+
+}
+
+/* ========================= */
+
+.btn:hover{
+
+    transform:translateY(-2px);
+
+    transition:.3s;
+
+}
+
+/* ========================= */
+
+canvas{
+
+    max-width:100%;
+
+}

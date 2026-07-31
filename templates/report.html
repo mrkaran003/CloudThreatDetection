@@ -2,74 +2,70 @@
 
 {% block content %}
 
-<div class="container mt-4">
+<h2 class="mb-4">
+    📊 Security Report Dashboard
+</h2>
 
-    <h2 class="mb-4">
-        Security Report
-    </h2>
+<div class="row">
 
-    <div class="row">
+    <div class="col-md-3">
 
-        <div class="col-md-3">
+        <div class="cyber-card mb-4 text-center">
 
-            <div class="card text-bg-primary mb-3">
+            <div class="card-title">
+                📁 Total Files
+            </div>
 
-                <div class="card-body">
-
-                    <h5>Total Files</h5>
-
-                    <h2>{{ total_files }}</h2>
-
-                </div>
-
+            <div class="card-number">
+                {{ total_files }}
             </div>
 
         </div>
 
-        <div class="col-md-3">
+    </div>
 
-            <div class="card text-bg-danger mb-3">
+    <div class="col-md-3">
 
-                <div class="card-body">
+        <div class="cyber-card mb-4 text-center">
 
-                    <h5>Total Threats</h5>
+            <div class="card-title">
+                🚨 Total Threats
+            </div>
 
-                    <h2>{{ total_threats }}</h2>
-
-                </div>
-
+            <div class="card-number text-danger">
+                {{ total_threats }}
             </div>
 
         </div>
 
-        <div class="col-md-3">
+    </div>
 
-            <div class="card text-bg-warning mb-3">
+    <div class="col-md-3">
 
-                <div class="card-body">
+        <div class="cyber-card mb-4 text-center">
 
-                    <h5>High Risk</h5>
+            <div class="card-title">
+                ⚠️ High Risk
+            </div>
 
-                    <h2>{{ high_risk }}</h2>
-
-                </div>
-
+            <div class="card-number text-warning">
+                {{ high_risk }}
             </div>
 
         </div>
 
-        <div class="col-md-3">
+    </div>
 
-            <div class="card text-bg-success mb-3">
+    <div class="col-md-3">
 
-                <div class="card-body">
+        <div class="cyber-card mb-4 text-center">
 
-                    <h5>Low Risk</h5>
+            <div class="card-title">
+                ✅ Low Risk
+            </div>
 
-                    <h2>{{ low_risk }}</h2>
-
-                </div>
-
+            <div class="card-number text-success">
+                {{ low_risk }}
             </div>
 
         </div>
@@ -78,6 +74,124 @@
 
 </div>
 
-<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+<hr class="my-4">
+
+<h3>
+    📥 Download Security Reports
+</h3>
+
+<p class="text-muted">
+    Export AI-generated cloud security reports in PDF or Excel format.
+</p>
+
+<div class="d-flex gap-3 flex-wrap">
+
+    <a
+        href="{{ url_for('report.generate_pdf') }}"
+        class="btn btn-danger btn-lg">
+
+        📄 Download PDF Report
+
+    </a>
+
+    <a
+        href="/report/excel"
+        class="btn btn-success btn-lg">
+
+        📊 Download Excel Report
+
+    </a>
+
+</div>
+
+<hr class="my-5">
+
+<h3 class="mb-3">
+    📋 Threat Report Summary
+</h3>
+
+<div class="table-responsive">
+
+    <table class="table table-dark table-hover align-middle">
+
+        <thead>
+
+            <tr>
+
+                <th>#</th>
+                <th>Filename</th>
+                <th>Severity</th>
+                <th>Status</th>
+                <th>Detected At</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            {% for threat in threats %}
+
+            <tr>
+
+                <td>{{ loop.index }}</td>
+
+                <td>{{ threat.filename }}</td>
+
+                <td>
+
+                    {% if threat.severity == "Critical" %}
+
+                        <span class="badge bg-danger">
+                            {{ threat.severity }}
+                        </span>
+
+                    {% elif threat.severity == "High" %}
+
+                        <span class="badge bg-warning text-dark">
+                            {{ threat.severity }}
+                        </span>
+
+                    {% elif threat.severity == "Medium" %}
+
+                        <span class="badge bg-info text-dark">
+                            {{ threat.severity }}
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge bg-success">
+                            {{ threat.severity }}
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+                <td>{{ threat.status }}</td>
+
+                <td>{{ threat.detected_at }}</td>
+
+            </tr>
+
+            {% else %}
+
+            <tr>
+
+                <td colspan="5" class="text-center">
+
+                    No threat reports found.
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
 
 {% endblock %}

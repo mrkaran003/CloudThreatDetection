@@ -1,23 +1,14 @@
-from flask import (
-    Blueprint,
-    render_template,
-    request,
-    redirect,
-    url_for,
-    flash,
-    current_app
-)
-
+from flask import Blueprint, render_template, request, redirect, flash
 from flask_login import login_required, current_user
+from werkzeug.utils import secure_filename
+from datetime import datetime
+import os
 
-from utils.helper import allowed_file, save_file
-from utils.database import db
-
-from models.models import UploadedFile, ThreatLog
-from models.threat_model import ThreatDetectionEngine
+from models.models import UploadedFile
 
 upload = Blueprint("upload", __name__)
 
+UPLOAD_FOLDER = "uploads"
 
 @upload.route("/upload", methods=["GET", "POST"])
 @login_required
@@ -25,100 +16,30 @@ def upload_file():
 
     if request.method == "POST":
 
-        if "file" not in request.files:
+        file = request.files.get("file")
 
-            flash("Please choose a file.", "danger")
+        if not file or file.filename == "":
+            flash("Please select a file.", "danger")
+            return redirect("/upload")
 
-            return redirect(request.url)
+        filename = secure_filename(file.filename)
 
-        file = request.files["file"]
+        os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-        if file.filename == "":
+        filepath = os.path.join(UPLOAD_FOLDER, filename)
 
-            flash("No file selected.", "warning")
-
-            return redirect(request.url)
-
-        if not allowed_file(
-            file.filename,
-            current_app.config["ALLOWED_EXTENSIONS"]
-        ):
-
-            flash("Invalid file type.", "danger")
-
-            return redirect(request.url)
-
-        filename, filepath = save_file(
-            file,
-            current_app.config["UPLOAD_FOLDER"]
-        )
+        file.save(filepath)
 
         uploaded = UploadedFile(
-
             filename=filename,
-
-            uploaded_by=current_user.username,
-
-            file_size=0,
-
-            file_type=filename.rsplit(".", 1)[1],
-
-            status="Analyzing"
-
+            uploaded_by=current_user.id,
+            uploaded_at=datetime.now()
         )
 
-        db.session.add(uploaded)
+        uploaded.save()
 
-        db.session.commit()
+        flash("File uploaded successfully.", "success")
 
-        engine = ThreatDetectionEngine()
+        return redirect("/files")
 
-        result = engine.analyze_file(filepath)
-
-        if result["status"] == "success":
-
-            threat = ThreatLog(
-
-                filename=filename,
-
-                threat_type=result["prediction"],
-
-                severity="High" if result["prediction"] == 1 else "Low",
-
-                prediction=str(result["prediction"]),
-
-                confidence=result["confidence"],
-
-                remarks="AI Analysis Completed"
-
-            )
-
-            db.session.add(threat)
-
-            uploaded.status = "Completed"
-
-            db.session.commit()
-
-            flash(
-                "AI analysis completed successfully.",
-                "success"
-            )
-
-        else:
-
-            uploaded.status = "Failed"
-
-            db.session.commit()
-
-            flash(
-                result["message"],
-                "danger"
-            )
-
-        return redirect(
-            url_for("dashboard.home")
-        )
-
-    return render_template(
-        "upload.html"
-    )
+    return render_template("upload.html")

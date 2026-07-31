@@ -2,87 +2,244 @@
 
 {% block content %}
 
-<div class="container mt-4">
-
 <h2 class="mb-4">
-Threat Detection History
+
+    🛡️ Threat History
+
 </h2>
 
-<div class="card shadow">
+<div class="cyber-card mb-4">
 
-<div class="card-body">
+    <div class="row">
 
-<table class="table table-bordered table-striped">
+        <div class="col-md-6">
 
-<thead class="table-dark">
+            <input
 
-<tr>
+                type="text"
 
-<th>ID</th>
-<th>Filename</th>
-<th>Prediction</th>
-<th>Severity</th>
-<th>Confidence</th>
-<th>Date</th>
+                id="searchInput"
 
-</tr>
+                class="form-control"
 
-</thead>
+                placeholder="🔍 Search file name..."
 
-<tbody>
+            >
 
-{% for threat in threats %}
+        </div>
 
-<tr>
+        <div class="col-md-6">
 
-<td>{{ threat.id }}</td>
+            <select
 
-<td>{{ threat.filename }}</td>
+                id="severityFilter"
 
-<td>{{ threat.prediction }}</td>
+                class="form-select"
 
-<td>
+            >
 
-{% if threat.severity=="High" %}
+                <option value="">
 
-<span class="badge bg-danger">
-High
-</span>
+                    All Severity
 
-{% else %}
+                </option>
 
-<span class="badge bg-success">
-Low
-</span>
+                <option value="Critical">
 
-{% endif %}
+                    Critical
 
-</td>
+                </option>
 
-<td>
+                <option value="High">
 
-{{ threat.confidence }}%
+                    High
 
-</td>
+                </option>
 
-<td>
+                <option value="Medium">
 
-{{ threat.detected_at }}
+                    Medium
 
-</td>
+                </option>
 
-</tr>
+                <option value="Low">
 
-{% endfor %}
+                    Low
 
-</tbody>
+                </option>
 
-</table>
+            </select>
+
+        </div>
+
+    </div>
 
 </div>
 
-</div>
+<div class="table-responsive">
+
+    <table
+        class="table table-dark table-hover align-middle"
+        id="historyTable"
+    >
+
+        <thead>
+
+            <tr>
+
+                <th>ID</th>
+
+                <th>File Name</th>
+
+                <th>Threat Type</th>
+
+                <th>Severity</th>
+
+                <th>Confidence</th>
+
+                <th>Remarks</th>
+
+                <th>Detected At</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            {% for threat in threats %}
+
+            <tr>
+
+                <td>{{ threat.id }}</td>
+
+                <td>{{ threat.filename }}</td>
+
+                <td>{{ threat.threat_type }}</td>
+
+                <td>
+
+                    {% if threat.severity == "Critical" %}
+
+                    <span class="badge bg-danger">
+
+                        {{ threat.severity }}
+
+                    </span>
+
+                    {% elif threat.severity == "High" %}
+
+                    <span class="badge bg-warning text-dark">
+
+                        {{ threat.severity }}
+
+                    </span>
+
+                    {% elif threat.severity == "Medium" %}
+
+                    <span class="badge bg-info">
+
+                        {{ threat.severity }}
+
+                    </span>
+
+                    {% else %}
+
+                    <span class="badge bg-success">
+
+                        {{ threat.severity }}
+
+                    </span>
+
+                    {% endif %}
+
+                </td>
+
+                <td>
+
+                    {{ "%.2f"|format(threat.confidence) }}%
+
+                </td>
+
+                <td>{{ threat.remarks }}</td>
+
+                <td>{{ threat.detected_at }}</td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
 
 </div>
+
+<script>
+
+const searchInput = document.getElementById(
+    "searchInput"
+);
+
+const severityFilter = document.getElementById(
+    "severityFilter"
+);
+
+searchInput.addEventListener(
+    "keyup",
+    filterTable
+);
+
+severityFilter.addEventListener(
+    "change",
+    filterTable
+);
+
+function filterTable() {
+
+    const searchValue =
+        searchInput.value.toLowerCase();
+
+    const severityValue =
+        severityFilter.value;
+
+    const rows = document.querySelectorAll(
+        "#historyTable tbody tr"
+    );
+
+    rows.forEach(row => {
+
+        const fileName =
+            row.cells[1].textContent.toLowerCase();
+
+        const severity =
+            row.cells[3].textContent.trim();
+
+        const showRow =
+
+            fileName.includes(
+                searchValue
+            )
+
+            &&
+
+            (
+                severityValue === ""
+
+                ||
+
+                severity.includes(
+                    severityValue
+                )
+            );
+
+        row.style.display =
+            showRow ? "" : "none";
+
+    });
+
+}
+
+</script>
 
 {% endblock %}
