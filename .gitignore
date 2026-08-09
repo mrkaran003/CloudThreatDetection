@@ -42,11 +42,14 @@ instance/
 uploads/*
 !uploads/.gitkeep
 
+routes/uploads/*
+!routes/uploads/.gitkeep
+
 # ==============================
 # Generated Reports
 # ==============================
 
-reports/*
+reports/
 *.pdf
 *.xlsx
 
@@ -65,14 +68,14 @@ logs/
 .idea/
 
 # ==============================
-# OS
+# Operating System
 # ==============================
 
 .DS_Store
 Thumbs.db
 
 # ==============================
-# Python Cache
+# Testing / Python Cache
 # ==============================
 
 .pytest_cache/
