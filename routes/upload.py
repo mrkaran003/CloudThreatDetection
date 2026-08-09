@@ -117,17 +117,10 @@ def upload_file():
 
             confidence = result["confidence"]
 
-            if confidence >= 90:
-                severity = "Critical"
-
-            elif confidence >= 75:
-                severity = "High"
-
-            elif confidence >= 50:
-                severity = "Medium"
-
-            else:
-                severity = "Low"
+            severity = result.get(
+                "severity",
+                "Low"
+            )
 
             threat = ThreatLog(
                 filename=filename,
