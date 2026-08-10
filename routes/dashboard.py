@@ -3,6 +3,8 @@ from flask_login import login_required
 from datetime import datetime
 
 from models.models import UploadedFile, ThreatLog
+from utils.database import db
+
 
 dashboard = Blueprint(
     "dashboard",
@@ -39,11 +41,22 @@ def home():
         0
     )
 
+    average_confidence = 0
     risk_score = 0
 
-    if total_files > 0:
+    if total_threats > 0:
+
+        average_confidence = round(
+            db.session.query(
+                db.func.avg(ThreatLog.confidence)
+            ).scalar() or 0,
+            1
+        )
+
         risk_score = round(
-            (total_threats / total_files) * 100,
+            db.session.query(
+                db.func.avg(ThreatLog.confidence)
+            ).scalar() or 0,
             1
         )
 
@@ -60,7 +73,9 @@ def home():
         ThreatLog.detected_at.desc()
     ).limit(8).all()
 
-    notification_count = len(recent_threats)
+    notification_count = len(
+        recent_threats
+    )
 
     return render_template(
         "dashboard.html",
@@ -75,6 +90,7 @@ def home():
 
         safe_logs=safe_logs,
         risk_score=risk_score,
+        average_confidence=average_confidence,
 
         ai_engine=ai_engine,
         database=database,

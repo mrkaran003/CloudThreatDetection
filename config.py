@@ -19,7 +19,7 @@ class Config:
     UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads")
     MAX_CONTENT_LENGTH = 20 * 1024 * 1024
 
-    ALLOWED_EXTENSIONS = {"csv", "txt", "log"}
+    ALLOWED_EXTENSIONS = {"csv", "txt", "log","json"}
 
     # Machine Learning
     MODEL_PATH = os.path.join(BASE_DIR, "model.pkl")

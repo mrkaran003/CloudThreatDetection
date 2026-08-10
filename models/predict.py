@@ -1,3 +1,5 @@
+import os
+import json
 import pandas as pd
 
 
@@ -42,15 +44,18 @@ class ThreatPredictor:
         except (ValueError, TypeError):
             malware_detected = 0
 
+        # Failed login risk
         if failed_login > 10:
             score += 40
 
         elif failed_login > 5:
             score += 20
 
+        # Unknown IP risk
         if unknown_ip == 1:
             score += 30
 
+        # Malware risk
         if malware_detected == 1:
             score += 50
 
@@ -112,9 +117,7 @@ class ThreatPredictor:
 
         for _, row in df.iterrows():
 
-            result = self.predict(
-                row
-            )
+            result = self.predict(row)
 
             results.append({
                 "risk_score": result["risk_score"],
@@ -123,23 +126,70 @@ class ThreatPredictor:
                 "confidence": result["confidence"]
             })
 
-        return pd.DataFrame(
-            results
+        return pd.DataFrame(results)
+
+    def load_file(self, filepath):
+
+        extension = os.path.splitext(
+            filepath
+        )[1].lower()
+
+        # CSV
+        if extension == ".csv":
+
+            return pd.read_csv(
+                filepath
+            )
+
+        # JSON
+        elif extension == ".json":
+
+            with open(
+                filepath,
+                "r",
+                encoding="utf-8"
+            ) as file:
+
+                data = json.load(file)
+
+            if isinstance(data, list):
+
+                return pd.DataFrame(data)
+
+            if isinstance(data, dict):
+
+                return pd.DataFrame([data])
+
+        # TXT / LOG
+        elif extension in [".txt", ".log"]:
+
+            try:
+
+                return pd.read_csv(
+                    filepath
+                )
+
+            except Exception:
+
+                return pd.read_csv(
+                    filepath,
+                    sep=None,
+                    engine="python"
+                )
+
+        raise ValueError(
+            f"Unsupported file format: {extension}"
         )
 
     def analyze_file(self, filepath):
 
         try:
 
-            df = pd.read_csv(
+            df = self.load_file(
                 filepath
             )
 
-            results = self.analyze_dataframe(
-                df
-            )
-
-            if results.empty:
+            if df.empty:
 
                 return {
                     "status": "success",
@@ -149,6 +199,10 @@ class ThreatPredictor:
                     "risk_score": 0,
                     "message": "No records found."
                 }
+
+            results = self.analyze_dataframe(
+                df
+            )
 
             highest_score = int(
                 results["risk_score"].max()
@@ -188,14 +242,15 @@ class ThreatPredictor:
                 "confidence": confidence,
                 "severity": highest_severity,
                 "risk_score": highest_score,
-                "message": "Threat analysis completed successfully."
+                "message":
+                    "Threat analysis completed successfully."
             }
 
-        except Exception as e:
+        except Exception as error:
 
             return {
                 "status": "error",
-                "message": str(e)
+                "message": str(error)
             }
 
 
