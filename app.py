@@ -10,6 +10,7 @@ from routes.profile import profile
 from routes.settings import settings
 from routes.admin import admin
 from routes.files import files
+from routes.agent_api import agent_api
 
 from utils.database import (
     init_database,
@@ -19,7 +20,7 @@ from utils.database import (
 )
 
 from models.models import User, ThreatLog
-
+from models.security_alert import SecurityAlert
 
 def create_app():
 
@@ -53,6 +54,7 @@ def create_app():
     app.register_blueprint(settings)
     app.register_blueprint(admin)
     app.register_blueprint(files)
+    app.register_blueprint(agent_api)
 
     # Create Database
     create_database(app)
