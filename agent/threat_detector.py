@@ -4,15 +4,19 @@ from datetime import datetime
 class RealTimeThreatDetector:
     """
     Defensive real-time threat detection engine.
-
-    Analyzes telemetry collected by the security agent and
-    generates alerts for suspicious activity.
     """
 
     def __init__(self):
         self.alerts = []
 
-    def create_alert(self, category, severity, risk_score, message, evidence):
+    def create_alert(
+        self,
+        category,
+        severity,
+        risk_score,
+        message,
+        evidence
+    ):
         alert = {
             "timestamp": datetime.now().isoformat(),
             "category": category,
@@ -65,8 +69,6 @@ class RealTimeThreatDetector:
         alerts = []
 
         suspicious_names = {
-            "powershell.exe",
-            "cmd.exe",
             "wscript.exe",
             "cscript.exe"
         }
@@ -80,7 +82,7 @@ class RealTimeThreatDetector:
                         "Process Activity",
                         "MEDIUM",
                         45,
-                        f"Sensitive system process observed: {name}",
+                        f"Script host process observed: {name}",
                         {
                             "pid": process.get("pid"),
                             "process": name,
